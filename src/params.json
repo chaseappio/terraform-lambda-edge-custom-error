@@ -1,0 +1,6 @@
+{
+  "errorCode": "${ERROR_CODE}",
+  "responseCode" : "${RESPONSE_CODE}",
+  "responsePagePath" : "${RESPONSE_PAGE_PATH}",
+  "pathPreserveDegree" : "${PATH_PRESERVE_DEGREE}"
+}
