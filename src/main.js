@@ -40,7 +40,7 @@ exports.handler = async (event, context, callback) => {
         });
 
         if(customResponse.statusCode >= 300){
-            console.log(`Non success status code for request ${customResponse.statusCode}. hostname: ${hostname}, path: ${path}`);
+            console.log(`Non success status code for request ${customResponse.statusCode}. hostname: ${domain}, path: ${path}`);
         }
 
         response = {
