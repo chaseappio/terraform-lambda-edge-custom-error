@@ -26,7 +26,7 @@ exports.handler = async (event, context, callback) => {
         
         let responsePagePath = ''
         if(uriParts.length > 0 ){
-            responsePagePath += '/' + uriParts;
+            responsePagePath += '/' + uriParts.join('/');
         }
         responsePagePath += '/' + config.responsePagePath;
 
