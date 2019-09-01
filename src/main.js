@@ -10,7 +10,7 @@ const config = JSON.parse(configString);
 exports.handler = async (event, context, callback) => {
 
     const cf = event.Records[0].cf;
-    const response = cf.response;
+    let response = cf.response;
     const request = cf.request;
     const statusCode = response.status;
 
@@ -23,9 +23,25 @@ exports.handler = async (event, context, callback) => {
                             .split('/',config.pathPreserveDegree);
 
         config.responsePagePath = config.responsePagePath.replace(/^\//,"")
-        const responsePagePath = '/' + uriParts + '/' + config.responsePagePath;
         
-        const customResponse = await httpGet({ hostname: domain, path: responsePagePath });
+        let responsePagePath = ''
+        if(uriParts.length > 0 ){
+            responsePagePath += '/' + uriParts;
+        }
+        responsePagePath += '/' + config.responsePagePath;
+
+        const headers = { };
+
+        headers['user-agent'] = request.headers['user-agent'].value;
+
+        const customResponse = await httpGet({ 
+                            hostname: domain, 
+                            path: responsePagePath 
+        });
+
+        if(customResponse.statusCode >= 300){
+            console.log(`Non success status code for request ${customResponse.statusCode}. hostname: ${hostname}, path: ${path}`);
+        }
 
         response = {
             status: config.responseCode,
@@ -45,7 +61,8 @@ function httpGet(params) {
         http.get(params, (resp) => {
             let result = {
                 headers: resp.headers,
-                body: ''
+                body: '',
+                statusCode: resp.statusCode
             };
             resp.on('data', (chunk) => { result.body += chunk; });
             resp.on('end', () => { resolve(result); });
