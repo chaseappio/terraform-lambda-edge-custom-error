@@ -36,11 +36,12 @@ exports.handler = async (event, context, callback) => {
 
         const customResponse = await httpGet({ 
                             hostname: domain, 
-                            path: responsePagePath 
+                            path: responsePagePath,
+                            headers : headers 
         });
 
-        if(customResponse.statusCode >= 300){
-            console.log(`Non success status code for request ${customResponse.statusCode}. hostname: ${domain}, path: ${path}`);
+        if(customResponse.statusCode >= 300){statusCode:resp.statusCode
+            console.log(`Non success status code for request ${customResponse.statusCode}. hostname: ${domain}, path: ${responsePagePath}`);
         }
 
         response = {
