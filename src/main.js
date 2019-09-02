@@ -47,9 +47,15 @@ exports.handler = async (event, context, callback) => {
             console.log(`Non success status code for request ${customResponse.statusCode}. hostname: ${domain}, path: ${responsePagePath}`);
         }
 
+
+        let resultHeaders = wrapAndFilterHeaders(customResponse.headers);
+
+        resultHeaders['transfer-encoding'] = response.headers['transfer-encoding'];
+        resultHeaders['via'] = response.headers['via'];
+
         response = {
             status: config.responseCode,
-            headers: wrapAndFilterHeaders(customResponse.headers),
+            headers: resultHeaders,
             body: customResponse.body
         };
     }
