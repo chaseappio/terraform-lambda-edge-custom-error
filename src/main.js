@@ -23,9 +23,9 @@ exports.handler = async (event, context, callback) => {
                             .replace(/\/$/,"")
                             .split('/',config.pathPreserveDegree);
 
-        config.responsePagePath = config.responsePagePath.replace(/^\//,"")
+        config.responsePagePath = config.responsePagePath.replace(/^\//,"");
         
-        let responsePagePath = ''
+        let responsePagePath = '';
         if(uriParts.length > 0 ){
             responsePagePath += '/' + uriParts.join('/');
         }
