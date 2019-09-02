@@ -17,7 +17,7 @@ exports.handler = async (event, context, callback) => {
     if(statusCode == config.errorCode){
 
         const domain = cf.config.distributionDomainName;
-        
+
         const uriParts = request.uri
                             .replace(/^\//,"")
                             .replace(/\/$/,"")
@@ -35,12 +35,8 @@ exports.handler = async (event, context, callback) => {
 
         const headerUserAgent = 'user-agent';
 
-        if(request.headers && request.headers[headerUserAgent] && 
-            request.headers[headerUserAgent][0] && request.headers[headerUserAgent][0].value) {
-            
-            headers[headerUserAgent] = request.headers[headerUserAgent][0].value;
-        }
-
+        headers[headerUserAgent] = extractHeader(request,headerUserAgent);
+        
         const customResponse = await httpGet({ 
                             hostname: domain, 
                             path: responsePagePath,
@@ -61,6 +57,25 @@ exports.handler = async (event, context, callback) => {
     callback(null, response);
 };
 
+function extractHeader(request,headerName) {
+    if(!request){
+        return null;
+    }
+
+    if(!request.headers){
+        return null;
+    }
+
+    if(!request.headers[headerName]){
+        return null;
+    }
+
+    if(request.headers[headerName].length <= 0){
+        return null;
+    }
+
+    return request.headers[headerName][0].value;
+}
 
 function httpGet(params) {
     return new Promise((resolve, reject) => {
@@ -106,7 +121,7 @@ function wrapAndFilterHeaders(headers){
                 responseHeaders[propName] = header;
             } else {
                 // fix to required format
-                responseHeaders[propName] = [{ value: header }];
+                responseHeaders[propName] = [{ key: propName, value: header }];
             }    
         }
 
