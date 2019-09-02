@@ -17,6 +17,7 @@ exports.handler = async (event, context, callback) => {
     if(statusCode == config.errorCode){
 
         const domain = cf.config.distributionDomainName;
+        
         const uriParts = request.uri
                             .replace(/^\//,"")
                             .replace(/\/$/,"")
@@ -32,7 +33,13 @@ exports.handler = async (event, context, callback) => {
 
         const headers = { };
 
-        headers['user-agent'] = request.headers['user-agent'].value;
+        const headerUserAgent = 'user-agent';
+
+        if(request.headers && request.headers[headerUserAgent] && 
+            request.headers[headerUserAgent][0] && request.headers[headerUserAgent][0].value) {
+            
+            headers[headerUserAgent] = request.headers[headerUserAgent][0].value;
+        }
 
         const customResponse = await httpGet({ 
                             hostname: domain, 
@@ -49,8 +56,6 @@ exports.handler = async (event, context, callback) => {
             headers: wrapAndFilterHeaders(customResponse.headers),
             body: customResponse.body
         };
-
-        response.status = config.responseCode;
     }
 
     callback(null, response);
