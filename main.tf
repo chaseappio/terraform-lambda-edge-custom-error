@@ -42,7 +42,7 @@ data "archive_file" "this" {
 resource "aws_lambda_function" "this" {
   description = "Lambda to route CloudFront origin request to api origin"
   role = "${aws_iam_role.this.arn}"
-  runtime = "nodejs8.10"
+  runtime = "nodejs10.x"
 
   filename = "${data.archive_file.this.output_path}"
   source_code_hash = "${data.archive_file.this.output_base64sha256}"
