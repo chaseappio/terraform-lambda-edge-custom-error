@@ -28,23 +28,20 @@ exports.handler = async (event, context, callback) => {
                             .replace(/\/$/,"")
                             .split('/',config.pathPreserveDegree);
 
-        config.responsePagePath = config.responsePagePath
-                                            .replace(/^\//,"");
         
-        let responsePagePath = '';
+        let responsePagePath = config.responsePagePath
+                                    .replace(/^\//,"");
 
         if(uriParts.length > 0 ){
-            responsePagePath.replace('{path}',uriParts.join('/'));
+            responsePagePath = responsePagePath.replace('{path}',uriParts.join('/'));
         }
         else{
-            responsePagePath.replace('/{path}','')
+            responsePagePath = responsePagePath.replace('/{path}','')
                             .replace('{path}','')
                             .replace(/^\//,"");
         }
 
-        responsePagePath += '/' + config.responsePagePath;
-
-
+        responsePagePath = '/' + responsePagePath;
         
 
         const headers = { };
