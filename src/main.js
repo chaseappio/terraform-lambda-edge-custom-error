@@ -14,6 +14,11 @@ exports.handler = async (event, context, callback) => {
     const request = cf.request;
     const statusCode = response.status;
 
+    if(request.uri.test(/\.[a-zA-Z]{1,4}$/)){
+        callback(null, response);
+        return;
+    }
+
     if(statusCode == config.errorCode){
 
         const domain = cf.config.distributionDomainName;
@@ -23,13 +28,24 @@ exports.handler = async (event, context, callback) => {
                             .replace(/\/$/,"")
                             .split('/',config.pathPreserveDegree);
 
-        config.responsePagePath = config.responsePagePath.replace(/^\//,"");
+        config.responsePagePath = config.responsePagePath
+                                            .replace(/^\//,"");
         
         let responsePagePath = '';
+
         if(uriParts.length > 0 ){
-            responsePagePath += '/' + uriParts.join('/');
+            responsePagePath.replace('{path}',uriParts.join('/'));
         }
+        else{
+            responsePagePath.replace('/{path}','')
+                            .replace('{path}','')
+                            .replace(/^\//,"");
+        }
+
         responsePagePath += '/' + config.responsePagePath;
+
+
+        
 
         const headers = { };
 
