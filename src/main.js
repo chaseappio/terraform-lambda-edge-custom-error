@@ -14,7 +14,7 @@ exports.handler = async (event, context, callback) => {
     const request = cf.request;
     const statusCode = response.status;
 
-    if(request.uri.test(/\.[a-zA-Z]{1,4}$/)){
+    if(/\.[a-zA-Z]{1,4}$/.test(request.uri)){
         callback(null, response);
         return;
     }
