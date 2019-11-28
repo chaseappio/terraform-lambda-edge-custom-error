@@ -1,17 +1,17 @@
 variable "error_code" {
-  type = "string"
+  type = string
 }
 
 variable "response_code" {
-  type = "string"
+  type = string
 }
 
 variable "response_page_path" {
-  type = "string"
+  type = string
 }
 
 variable "name" {
-  type = "string"
+  type = string
 }
 
 variable "path_preserve_degree" {
